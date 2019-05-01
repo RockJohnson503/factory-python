@@ -9,6 +9,5 @@ from . import views
 
 app_name = 'update'
 urlpatterns = [
-    path('', views.index, name='index'),
     path('update/', views.update, name='update'),
 ]
