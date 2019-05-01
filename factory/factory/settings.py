@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'login.apps.LoginConfig',
+    'turnoverZNQ.apps.TurnoverConfig',
     'update.apps.UpdateConfig',
     'django.contrib.admin',
     'django.contrib.auth',
