@@ -2,9 +2,6 @@ import os
 from django.http import HttpResponse
 from django.shortcuts import render
 
-def index(request):
-    return render(request, 'index.html')
-
 def update(request):
     is_success = -1 # 返回结果,-1表示没有安装git,0表示更新失败.
 
