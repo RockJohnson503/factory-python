@@ -8,7 +8,7 @@ def index(request):
 def update(request):
     is_success = -1 # 返回结果,-1表示没有安装git,0表示更新失败.
 
-    file = os.path.dirname(os.path.abspath(""))
+    file = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.chdir(file)
     if os.system("git help") == 0:
         if os.system("git pull") == 0:
