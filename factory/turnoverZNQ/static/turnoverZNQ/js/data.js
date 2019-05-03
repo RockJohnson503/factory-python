@@ -2,8 +2,8 @@
 function getDatas(urls){
     let results;
     $.ajax({
-        url : location.protocol + "//" + location.hostname + ":" + location.port + "/" + urls,
-        type : "post",
+        url : urls,
+        type : "GET",
         async : false,
         success : function (data) {
              results = data;
