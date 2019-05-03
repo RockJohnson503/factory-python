@@ -92,7 +92,7 @@ function deleteDatas(node) {
     let thisId = tds.eq(1).text();
     let thisName = tds.eq(2).text();
 
-    sure = confirm("确认要删除\n厂家: {0}, 型号: {1}, 名称: {2}\n此产品吗!".replace("{0}", thisFactory).replace("{1}", thisId).replace("{2}", thisName));
+    sure = confirm("确认要删除\n厂家: {0},\n型号: {1},\n名称: {2}\n此产品吗!".replace("{0}", thisFactory).replace("{1}", thisId).replace("{2}", thisName));
     if(!sure){return}
 
     let origin = {"factory": thisFactory, "id": thisId, "name": thisName};
@@ -120,4 +120,16 @@ function operatToggle() {
     }
     //加载弹窗
     loadModal();
+}
+
+//更新
+function update(url) {
+    res = getDatas(url);
+    if(res === -1){
+        alert("您还没有安装git!")
+    }else if(res === 0){
+        alert("更新失败!")
+    }else {
+        alert("更新成功,请重启服务器!")
+    }
 }
