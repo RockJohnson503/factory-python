@@ -1,0 +1,75 @@
+{% extends 'turnoverZNQ/base.html' %}
+{% block title %}流水账{% endblock %}
+{% block thead %}
+    <tr>
+        <th>厂家{{ test }}</th>
+        <th>型号</th>
+        <th>名称</th>
+        <th>期初</th>
+        <th>现存</th>
+        <th>入库合计</th>
+        <th>领料合计</th>
+        <th><span title="切换操作" style="cursor: pointer" onclick="operatToggle()">操作</span></th>
+    </tr>
+{% endblock %}
+
+{% block botton %}
+    <button class="showDatasBtn" onclick="addDatas()">添加产品</button>
+{% endblock %}
+
+{% block tbody %}
+    {% if page_lst %}
+        {% for pro in page_lst %}
+            <tr>
+                <td style='cursor: pointer' ondblclick='changeDatas($(this), "factory")'>{{ pro.factory_name|default:'空' }}</td>
+                <td style='cursor: pointer' ondblclick='changeDatas($(this), "id")'>
+                    <a href="{% url 'turnoverZNQ:detail' pro.id 1 %}">{{ pro.product_type }}</a>
+                </td>
+                <td style='cursor: pointer' ondblclick='changeDatas($(this), "name")'>{{ pro.product_name }}</td>
+                <td style='cursor: pointer' ondblclick='changeDatas($(this), "first")'>{{ pro.product_default }}</td>
+                <td>{{ pro.product_now }}</td>
+                <td>{{ pro.product_in }}</td>
+                <td>{{ pro.product_out }}</td>
+                <td>
+                    <button class='checkBtn showModal'>入库</button>
+                    <button class='checkBtn showModal ml'>领料</button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr><td colspan="8"><div class="reminder"><p>没有检索到数据</p></div></td></tr>
+    {% endif %}
+{% endblock %}
+
+{% block modal %}
+    <div id="modal" class="modal">
+        <div class="modal-dialog animated">
+            <div class="modal-content">
+                <form class="form-horizontal" method="get">
+                    <div class="modal-header">
+                        <strong></strong>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group col-xs-7 mb">
+                                <input placeholder="批次号..." type="text" name="keys" class="form-control" />
+                            </div>
+                            <div class="input-group col-xs-7 mb">
+                                <input placeholder="数量..." type="text" name="amounts" class="form-control" />
+                            </div>
+                            <div class="input-group col-xs-7">
+                                <input placeholder="时间: m-d" type="text" name="dates" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" onclick="modal.close(0);">取消</button>
+                        <button class="btn btn-primary" type="button" onclick="modal.close(1);">确认</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'turnoverZNQ/base.html' %}
+{% block title %}流水账明细{% endblock %}
+{% block thead %}
+    <tr>
+        <th>厂家</th>
+        <th>型号</th>
+        <th>名称</th>
+        <th>批次号</th>
+        <th>操作</th>
+        <th>数量</th>
+        <th>日期</th>
+    </tr>
+{% endblock %}
+
+{% block tbody %}
+    {% if page_lst %}
+        {% for detail in page_lst %}
+            <tr>
+                <td>{{ detail.product.factory_name|default:'空' }}</td>
+                <td>{{ detail.product.product_type }}</td>
+                <td>{{ detail.product.product_name }}</td>
+                <td>{{ detail.bill_id }}</td>
+                <td>{{ detail.operate }}</td>
+                <td>{{ detail.operate_num }}</td>
+                <td>{{ detail.time|date:'Y-n-j' }}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr><td colspan="7"><div class="reminder"><p>没有检索到数据</p></div></td></tr>
+    {% endif %}
+{% endblock %}
+
+{% block prev_href %}{% url 'turnoverZNQ:detail' product_id prev_page %}{% endblock %}
+{% block page_href %}{% url 'turnoverZNQ:detail' product_id page %}{% endblock %}
+{% block next_href %}{% url 'turnoverZNQ:detail' product_id next_page %}{% endblock %}

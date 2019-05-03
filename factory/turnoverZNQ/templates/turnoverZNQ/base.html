@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'turnoverZNQ/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'turnoverZNQ/css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'turnoverZNQ/css/search-form.css' %}">
+{% endblock %}
+{% block content %}
+    <div>
+        <div class="digital">
+            <!-- 中间表格部分  S-->
+            <table width="100%" id="userImportTable" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <td colspan="8">
+                            <div class="dataTablesInfo"  role="status" aria-live="polite">
+                                {% block botton %}<a href="{% url 'turnoverZNQ:index' %}"><button class="showDatasBtn">返回主页</button></a>{% endblock %}
+                            </div>
+
+                            <!--动态搜索框-->
+                            <section class="container">
+                                <form style="position: relative" onsubmit="submitFn(this, event);">
+                                    <div class="search-wrapper">
+                                        <div class="input-holder">
+                                            <input type="text" class="search-input" placeholder="格式: 厂家&型号&名称" />
+                                            <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+                                        </div>
+                                        <span class="close" onclick="searchToggle(this, event);"></span>
+                                    </div>
+                                </form>
+                            </section>
+                        </td>
+                    </tr>
+                    {% block thead %}{% endblock %}
+                </thead>
+                <tbody>{% block tbody %}{% endblock %}</tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="8" height="30">
+                            <div class="userImportTableBottom">
+                                <!--可选择每页暂时数据条数-->
+                                <div class="digitalLength" >
+                                    <label>每页显示
+                                        <select name="tablesLength" class="tablesLength" onchange="changePages(this.value)">
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                            <option value="全部">全部</option>
+                                        </select>
+                                    </label>
+                                </div>
+
+                                <!--显示页码数，前翻页，后翻页，当前页码-->
+                                <div class=" tablePageinate">
+                                    {% if prev_page %}
+                                        <a href="{% block prev_href %}{% url 'turnoverZNQ:product' prev_page %}{% endblock %}" class="pageinateBtn previous">&lt;</a>
+                                    {% else %}
+                                        <a href="javascript:;" class="pageinateBtn previous disabled">&lt;</a>
+                                    {% endif %}
+
+                                    {% for page in page_num %}
+                                        {% if page %}
+                                            <span class="pageBtnS">
+                                                <a href="{% block page_href %}{% url 'turnoverZNQ:product' page %}{% endblock %}"
+                                                   class="pageinateBtn{% if page == cur_page %} current{% endif %}">{{ page }}</a>
+                                            </span>
+                                        {% endif %}
+{#                                        <span class="nextEllipsis">...</span>#}
+                                    {% endfor %}
+
+                                    {% if next_page %}
+                                        <a href="{% block next_href %}{% url 'turnoverZNQ:product' next_page %}{% endblock %}" class="pageinateBtn next">&gt;</a>
+                                    {% else %}
+                                        <a href="javascript:;" class="pageinateBtn next disabled">&gt;</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!-- 中间表格部分  E-->
+        </div>
+    </div>
+
+    <!--模态窗口-->
+    {% block modal %}{% endblock %}
+
+    <!--返回顶部-->
+    <div class="leftNav-item">
+		<ul>
+			<li title="返回顶部" class="for-top">
+				<i class="fa fa-arrow-up"></i>
+				<a href="javascript:;" class="rota">去顶部</a>
+			</li>
+		</ul>
+	</div>
+{% endblock %}
+{% block script %}
+{#    <script src="{% static 'turnoverZNQ/js/jsoner.js' %}"></script>#}
+{#    <script src="{% static 'turnoverZNQ/js/config.js' %}"></script>#}
+{#    <script src="{% static 'turnoverZNQ/js/link.js' %}"></script>#}
+    <script src="{% static 'turnoverZNQ/js/data.js' %}"></script>
+    <script src="{% static 'turnoverZNQ/js/table.js' %}"></script>
+    <script src="{% static 'turnoverZNQ/js/rmodal.js' %}"></script>
+    <script src="{% static 'turnoverZNQ/js/nav.js' %}"></script>
+    <script src="{% static 'turnoverZNQ/js/searchBar.js' %}"></script>
+    <script>loadModal();</script>
+{#    <script src="{% static 'turnoverZNQ/js/init.js' %}"></script>#}
+{% endblock %}
