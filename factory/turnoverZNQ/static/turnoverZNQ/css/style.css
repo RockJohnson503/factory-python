@@ -89,6 +89,10 @@ table tbody tr, .reseachIput, #tablesLength>label>select, #tablesPageinate .page
     margin-right: 25px;
     float: right;
 }
+.tablesUpdate{
+    float: left;
+    margin-left: 25px;
+}
 .userImportTableBottom  .tablePageinate,.userImportTableBottom  .digitalLength{
     display: inline-block;
 }
