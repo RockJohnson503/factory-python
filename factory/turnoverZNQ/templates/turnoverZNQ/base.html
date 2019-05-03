@@ -17,6 +17,11 @@
                                 {% block botton %}<a href="{% url 'turnoverZNQ:index' %}"><button class="showDatasBtn">返回主页</button></a>{% endblock %}
                             </div>
 
+                            <!--更新按钮-->
+                            <div class="tablesUpdate"  role="status" aria-live="polite">
+                                <button class="showDatasBtn" onclick="update('{% url 'update:update' %}')">更新软件</button>
+                            </div>
+
                             <!--动态搜索框-->
                             <section class="container">
                                 <form style="position: relative" method="post" action="" onsubmit="submitFn(this, event);">
