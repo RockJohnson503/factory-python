@@ -1,3 +1,6 @@
 *.idea
 __pycache__
 factory/test.py
+factory/turnoverZNQ/migrations/*
+factory/login/migrations/*
+factory/update/migrations/*
