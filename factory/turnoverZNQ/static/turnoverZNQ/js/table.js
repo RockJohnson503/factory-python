@@ -72,13 +72,13 @@ function addDatas(){
 
     if(checkOperat(trs)){return ;}
     let trHtml=$("<tr class='adding'>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='factory_name' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_id' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_name' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_detault' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_now' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_in' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input name='product_out' type='text' placeholder='请输入...'></div></td>"+
         "<td><button class='checkBtn' onclick='checkAddDatas(this)'>确定</button> " +
         "<button class='checkBtn ml' onclick='cancle(this)'>取消</button></td>"+
     "</tr>");
