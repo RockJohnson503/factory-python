@@ -10,6 +10,6 @@ from . import views
 app_name = 'turnoverZNQ'
 urlpatterns=[
     path('', views.index, name='index'),
-    path('product/page/<int:page>/', views.product, name='product'),
+    path('page/<int:page>/', views.product, name='product'),
     path('detail/<int:product_id>/page/<int:page>', views.detail, name='detail'),
 ]
