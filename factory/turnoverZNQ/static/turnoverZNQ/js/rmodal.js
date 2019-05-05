@@ -21,21 +21,16 @@ function loadModal() {
     }, false);
 
     $(".showModal").bind("click", function (ev) {
-        let thisOperat = this.innerText;
-        let thisFactory = this.parentNode.parentNode.childNodes.item(0).innerHTML;
-        let thisId = this.parentNode.parentNode.childNodes.item(1).innerText;
-        let thisName = this.parentNode.parentNode.childNodes.item(2).innerHTML;
-        let args = {"factory" : thisFactory, "id" : thisId, "name" : thisName};
+        let this_operat = this.innerText;
+        let this_type = $(this).parent().parent().children().eq(1).text();
+        let this_id = $(this).parent().parent().attr("_id");
 
-        if(thisOperat !== "入库" && thisOperat !== "领料"){
+        if(this_operat !== "入库" && this_operat !== "领料"){
             alert("页面已被篡改,请按F5刷新页面后重新操作!");
             return ;
         }
-        if(thisOperat === "领料" && Number(jsonSearchKey("now", args)) <= 0){
-            alert("没有现存,无法领料!");
-            return ;
-        }
-        idOperat(thisFactory, thisId, thisName, thisOperat);
+
+        idOperat(this_id, this_type, this_operat);
         ev.preventDefault();
         modal.open();
     });
