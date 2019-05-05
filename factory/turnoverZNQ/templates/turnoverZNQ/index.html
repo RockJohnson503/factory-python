@@ -30,7 +30,7 @@
                 <td>{{ pro.product_out }}</td>
                 <td>
                     <button class='checkBtn showModal'>入库</button>
-                    <button class='checkBtn showModal ml'>领料</button>
+                    <button {% if pro.product_now <= 0 %}disabled="disabled"{% endif %} class='checkBtn showModal ml'>领料</button>
                 </td>
             </tr>
         {% endfor %}
