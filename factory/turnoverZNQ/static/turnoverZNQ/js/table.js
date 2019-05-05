@@ -72,32 +72,17 @@ function addDatas(){
 
     if(checkOperat(trs)){return ;}
     let trHtml=$("<tr class='adding'>"+
-        "<td><div class='ui input'><input name='factory_name' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_id' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_name' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_detault' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_now' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_in' type='text' placeholder='请输入...'></div></td>"+
-        "<td><div class='ui input'><input name='product_out' type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
+        "<td><div class='ui input'><input type='text' placeholder='请输入...'></div></td>"+
         "<td><button class='checkBtn' onclick='checkAddDatas(this)'>确定</button> " +
         "<button class='checkBtn ml' onclick='cancle(this)'>取消</button></td>"+
     "</tr>");
     $("#userImportTable>tbody").prepend(trHtml);
-}
-
-//删除产品的操作
-function deleteDatas(node) {
-    let tds = node.parent().parent().children();
-    let thisFactory = tds.eq(0).text();
-    let thisId = tds.eq(1).text();
-    let thisName = tds.eq(2).text();
-
-    sure = confirm("确认要删除\n厂家: {0},\n型号: {1},\n名称: {2}\n此产品吗!".replace("{0}", thisFactory).replace("{1}", thisId).replace("{2}", thisName));
-    if(!sure){return}
-
-    let origin = {"factory": thisFactory, "id": thisId, "name": thisName};
-    if(getDatas("deleteData?origin=" + JSON.stringify(origin)) === null){alert("删除产品失败!"); return}
-    location.reload();
 }
 
 //改变操作按钮
