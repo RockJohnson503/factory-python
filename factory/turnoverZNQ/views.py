@@ -71,7 +71,7 @@ def product_add(request):
     args = json.loads(request.GET.get('args'))
     try:
         User.objects.get(id=1).product_set.get(factory_name=args['factory'], product_type=args['id'], product_name=args['name'])
-        return HttpResponse('duplicate')
+        res = 'duplicate'
     except:
         # 是没有重复的产品
         try:
@@ -80,18 +80,38 @@ def product_add(request):
                                                       product_out=args['out'])
             User.objects.get(id=1).log_set.create(log_time=now(), product_id=product.id, operate='添加产品')
         except:
-            return HttpResponse('err')
-        return HttpResponse('ok')
+            res = 'err'
+        res = 'ok'
+    return HttpResponse(res)
 
 def product_del(request):
     # 删除产品
     product_id = request.GET.get('id')
+    res = 'ok'
     try:
         User.objects.get(id=1).product_set.filter(id=product_id).update(is_delete=1)
         User.objects.get(id=1).log_set.create(log_time=now(), product_id=product_id, operate='删除产品')
     except:
-        return HttpResponse('err')
-    return HttpResponse('ok')
+        res = 'err'
+    return HttpResponse(res)
 
 def detail_add(request, product_id):
-    pass
+    # 添加流水账明细
+    args = json.loads(request.GET.get('args'))
+    try:
+        product = User.objects.get(id=1).product_set.get(id=product_id)
+        detail = product.detail_set.create(bill_id=args['bill_id'], operate=args['operate'], operate_num=args['num'], time=args['time'])
+
+        if args['operate'] == "入库":
+            product.product_in += args['num']
+            detail.productlave_set.create(amount=args['num'])
+        else:
+            product.product_out += args['num']
+        product.product_now = product.product_default + product.product_in - product.product_out
+        product.save()
+
+        User.objects.get(id=1).log_set.create(log_time=now(), detail_id=detail.id, operate=args['operate'])
+        res = 'ok'
+    except:
+        res = 'err'
+    return HttpResponse(res)
