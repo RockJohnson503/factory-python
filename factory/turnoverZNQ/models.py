@@ -36,7 +36,14 @@ class Detail(models.Model):
         return self.bill_id
 
 
+class ProductLave(models.Model):
+    amount = models.IntegerField(verbose_name='数量')
+    detail = models.ForeignKey(Detail, on_delete=models.DO_NOTHING, verbose_name='明细id')
+
+
 class Log(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='用户id')
-    detail = models.ForeignKey(Detail, on_delete=models.DO_NOTHING, verbose_name='明细id')
+    detail = models.ForeignKey(Detail, on_delete=models.DO_NOTHING, null=True, verbose_name='明细id')
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, null=True, verbose_name='产品id')
+    operate = models.CharField(max_length=10, default=None, verbose_name='操作方式')
     log_time = models.DateTimeField(auto_now=True, verbose_name='操作时间')
