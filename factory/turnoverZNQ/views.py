@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponse
 from django.core.paginator import Paginator
 from django.urls import reverse
+import json
 
 from login.models import User
 
@@ -9,6 +10,7 @@ def index(request):
     return redirect(reverse('turnoverZNQ:product', args=(1,)))
 
 def page_treat(cur_page, page_num):
+    # 处理分页按钮
     res = page_num
     for i in res:
         if len(page_num) < 6:
@@ -27,6 +29,7 @@ def page_treat(cur_page, page_num):
     return res
 
 def base_page(model, page):
+    # 通用的分页方法
     next_page = None
     prev_page = None
     paginator = Paginator(model, 10)
@@ -48,14 +51,41 @@ def base_page(model, page):
     return {'page_lst': page_lst, 'cur_page': page, 'prev_page': prev_page, 'next_page': next_page, 'page_num': page_num}
 
 def product(request, page=1):
-    products = User.objects.get(id=1).product_set.all()
+    # 产品的视图
+    products = User.objects.get(id=1).product_set.filter(is_delete=0).order_by('product_name')
     res = base_page(products, page)
     return render(request, 'turnoverZNQ/index.html', res) if res else HttpResponseNotFound()
 
 def detail(request, product_id, page=1):
+    # 某产品的流水明细
     products = get_object_or_404(User.objects.get(id=1).product_set, pk=product_id)
-    details = products.detail_set.all()
+    details = products.detail_set.order_by('time')
     res = base_page(details, page)
     if res:
         res['product_id'] = product_id
     return render(request, 'turnoverZNQ/detail.html', res) if res else HttpResponseNotFound()
+
+def product_add(request):
+    # 添加产品
+    args = json.loads(request.GET.get('args'))
+    try:
+        User.objects.get(id=1).product_set.get(factory_name=args['factory'], product_type=args['id'], product_name=args['name'])
+        return HttpResponse('duplicate')
+    except:
+        # 是没有重复的产品
+        try:
+            User.objects.get(id=1).product_set.create(factory_name=args['factory'], product_type=args['id'], product_name=args['name'],
+                                                      product_default=args['first'], product_now=args['now'], product_in=args['in'],
+                                                      product_out=args['out'])
+        except:
+            return HttpResponse('err')
+        return HttpResponse('ok')
+
+def product_del(request):
+    # 删除产品
+    product_id = request.GET.get('id')
+    try:
+        User.objects.get(id=1).product_set.filter(id=product_id).update(is_delete=1)
+    except:
+        return HttpResponse('err')
+    return HttpResponse('ok')
