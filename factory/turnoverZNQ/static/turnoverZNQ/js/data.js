@@ -160,9 +160,9 @@ function checkAddDatas(node) {
     let trNode = node.parentNode.parentNode;
     let inputNodes = trNode.getElementsByTagName("input");
     let results = {
-        "factory": "空",
-        "id": "空",
-        "name": "空",
+        "factory": "",
+        "id": "",
+        "name": "",
         "first": 0,
         "now": 0,
         "in": 0,
@@ -180,7 +180,7 @@ function checkAddDatas(node) {
     for(let k in results){
         let vals = inputNodes[i].value;
 
-        //装换数据类型
+        //转换数据类型
         if(i >= 3){
             vals = Number(vals);
             if(!vals && vals !== 0){
@@ -196,19 +196,9 @@ function checkAddDatas(node) {
     }
 
     //验证必输入字段
-    if(results.id === "空" || results.name === "空"){
+    if(results.id === "" || results.name === ""){
         alert("您还没填写型号和名称列表!");
         return ;
-    }
-
-    //验证型号是否重复
-    for(let k in useData.data){
-        if(results.id === useData.data[k].id &&
-            results.factory === useData.data[k].factory &&
-            results.name === useData.data[k].name){
-            alert("您输入了重复的产品!");
-            return ;
-        }
     }
 
     //验证完毕
@@ -218,17 +208,29 @@ function checkAddDatas(node) {
         ",  现存: " + results.now + ",  入库合计: " + results.in +
         ",  领料合计: " + results.out;
     let check = confirm("您输入的产品是:\n" + txt + "\n请仔细确认!");
-    if(!check){
-        return ;
-    }
+    if(!check){return ;}
 
-    let q = jsonPush(JSON.stringify(results));
-    if(q !== null){
-        alert("添加产品成功!");
-        location.reload();
-    }else{
+    let q = getDatas('/product/add/?args=' + JSON.stringify(results));
+    if(q === 'err'){
+        alert("添加产品失败!");
+    }else if(q === 'duplicate'){
+        alert("添加的重复产品!")
+    }else if(q === null){
         alert("添加产品失败!code(2)");
+    }else{
+        location.reload();
     }
+}
+
+//删除产品的操作
+function deleteDatas(node) {
+    let tr = node.parent().parent();
+
+    sure = confirm("确认要删除此产品吗!");
+    if(!sure){return}
+
+    if(getDatas("/product/delete/?id=" + tr.attr('_id')) === 'err'){alert("删除产品失败!"); return}
+    location.reload();
 }
 
 //修改产品信息
