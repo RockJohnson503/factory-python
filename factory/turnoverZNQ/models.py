@@ -17,6 +17,9 @@ class Product(models.Model):
     def __str__(self):
         return self.product_type
 
+    def data_is_normal(self):
+        return self.product_now == self.product_default + self.product_in - self.product_out
+
     def is_del(self):
         return False if self.is_delete == 0 else True
 
