@@ -89,3 +89,6 @@ def product_del(request):
     except:
         return HttpResponse('err')
     return HttpResponse('ok')
+
+def detail_add(reqeust, product_id):
+    pass
