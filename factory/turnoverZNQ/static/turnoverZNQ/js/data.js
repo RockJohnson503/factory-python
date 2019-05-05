@@ -18,8 +18,8 @@ function getDatas(urls){
 }
 
 //型号的操作
-function idOperat(factory, id, name, operat){
-    let modalHeader = document.getElementsByClassName("modal-header")[0].getElementsByTagName("strong")[0];
+function idOperat(id, type, operat){
+    let modalHeader = $(".modal-header strong")[0];
 
     if(modalHeader.innerText !== ""){
         $(".modal-body .input-group").eq(0).css("display", "");
@@ -28,65 +28,62 @@ function idOperat(factory, id, name, operat){
     if(operat === "领料"){
         $(".modal-body .input-group").eq(0).css("display", "none");
     }
-    modalHeader.setAttribute("_factory", factory);
-    modalHeader.setAttribute("_id", id);
-    modalHeader.setAttribute("_name", name);
-    modalHeader.append(operat + "型号: " + id);
+    modalHeader.setAttribute('_id', id);
+    modalHeader.append(operat + "型号: " + type);
 }
 
 //检查批次号输入的数据
 function checkOpDatas() {
     let modalHeader = $(".modal-header strong")[0];
-    let thisFactory = modalHeader.getAttribute("_factory");
-    let thisId = modalHeader.getAttribute("_id");
-    let thisName = modalHeader.getAttribute("_name");
-    let key = $("input[name = 'keys']").val();
+    // let thisFactory = modalHeader.getAttribute("_factory");
+    let this_id = Number(modalHeader.getAttribute("_id"));
+    // let thisName = modalHeader.getAttribute("_name");
+    let bill_id = $("input[name = 'keys']").val();
     let amounts = Number($("input[name = 'amounts']").val());
     let dates = $("input[name = 'dates']").val();
     let date = new Date();
-    let results = [];
-    let product = jsonSearch({"factory": thisFactory, "id": thisId, "name": thisName}).data[0];
-    let keys = getDatas("getJsonData?cur=keyNum");
-
+    let results = "";
+    // let product = jsonSearch({"factory": thisFactory, "id": thisId, "name": thisName}).data[0];
+    // let keys = getDatas("getJsonData?cur=keyNum");
+    //
     if(dates && !/(\d{1,2})\-(\d{1,2})/.test(dates)){
         alert("请输入正确的时间!");
         return ;
     }
-    let txt = (key ? ("批次号: " + key + ", ") : "") + "数量: " + amounts + ", 时间: " + dates;
+
+    let txt = (bill_id ? ("批次号: " + bill_id + ", ") : "") + "数量: " + amounts + ", 时间: " + dates;
     let check = confirm("您输入的信息是:\n" + txt + "\n请仔细确认!");
     if(!check){
         return ;
     }
 
-    //具体操作
+    // //具体操作
     if(modalHeader.innerText.indexOf("入库") !== -1){
-        if(!key || !amounts){
+        if(!bill_id || !amounts){
             alert("请输入批次号和数量!");
             return ;
         }
-
-        product.in += amounts;
-        product.now = product.first + product.in - product.out;
-        results.push(product);
-        results.push({
-            "factory": thisFactory,
-            "id": thisId,
-            "name": thisName,
-            "key": key,
-            "operat": "入库",
+        res = {
+            "bill_id": bill_id,
+            "operate": "入库",
             "num": amounts,
-            "date": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())
-        });
-        results.push({"factory": thisFactory, "id": thisId, "name": thisName, "key": key, "num": amounts});
+            "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())
+        };
+        if(getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(res)) === 'err'){alert("入库失败!code(3)"); return ;}
 
-        if(jsonPush(JSON.stringify(results[0]), "turnoverData") !== null &&
-            jsonPush(JSON.stringify(results[1]), "detailData") !== null &&
-            jsonPush(JSON.stringify(results[2]), "keyNum") !== null){
-            alert("入库成功!");
-        }else{
-            alert("入库失败!code(3)");
-            return ;
-        }
+    //     product.in += amounts;
+    //     product.now = product.first + product.in - product.out;
+    //     results.push(product);
+    //     results.push();
+    //     results.push({"factory": thisFactory, "id": thisId, "name": thisName, "key": key, "num": amounts});
+    //
+    //     if(jsonPush(JSON.stringify(results[0]), "turnoverData") !== null &&
+    //         jsonPush(JSON.stringify(results[1]), "detailData") !== null &&
+    //         jsonPush(JSON.stringify(results[2]), "keyNum") !== null){
+    //     }else{
+    //         alert("入库失败!code(3)");
+    //         return ;
+    //     }
     }else{
         if(!amounts){
             alert("请输入数量!");
@@ -150,9 +147,8 @@ function checkOpDatas() {
         }
 
         if(jsonPush(JSON.stringify(product), "turnoverData") === null){alert("领料失败!code(8)");return;}
-        alert("领料成功!");
     }
-    location.reload();
+    // location.reload();
 }
 
 //检查添加输入的数据
@@ -197,12 +193,15 @@ function checkAddDatas(node) {
 
     //验证必输入字段
     if(results.id === "" || results.name === ""){
-        alert("您还没填写型号和名称列表!");
+        alert("您还没填写产品的型号和名称!");
         return ;
     }
 
     //验证完毕
-    results.now = results.first + results.in - results.out;
+    if(results.now !== results.first + results.in - results.out){
+        alert("添加的数据异常,请检查您输入的期初.现存.入库合计和领料合计是否错误!");
+        return ;
+    }
     let txt = "厂家: " + results.factory + ",  型号: " + results.id +
         ",  名称: " + results.name + ",  期初: " + results.first +
         ",  现存: " + results.now + ",  入库合计: " + results.in +
