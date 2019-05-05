@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseNotFound, HttpResponse
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.utils.timezone import now
 import json
 
 from login.models import User
@@ -74,9 +75,10 @@ def product_add(request):
     except:
         # 是没有重复的产品
         try:
-            User.objects.get(id=1).product_set.create(factory_name=args['factory'], product_type=args['id'], product_name=args['name'],
+            product = User.objects.get(id=1).product_set.create(factory_name=args['factory'], product_type=args['id'], product_name=args['name'],
                                                       product_default=args['first'], product_now=args['now'], product_in=args['in'],
                                                       product_out=args['out'])
+            User.objects.get(id=1).log_set.create(log_time=now(), product_id=product.id, operate='添加产品')
         except:
             return HttpResponse('err')
         return HttpResponse('ok')
@@ -86,9 +88,10 @@ def product_del(request):
     product_id = request.GET.get('id')
     try:
         User.objects.get(id=1).product_set.filter(id=product_id).update(is_delete=1)
+        User.objects.get(id=1).log_set.create(log_time=now(), product_id=product_id, operate='删除产品')
     except:
         return HttpResponse('err')
     return HttpResponse('ok')
 
-def detail_add(reqeust, product_id):
+def detail_add(request, product_id):
     pass
