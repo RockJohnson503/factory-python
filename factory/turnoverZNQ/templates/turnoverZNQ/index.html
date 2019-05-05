@@ -20,11 +20,9 @@
 {% block tbody %}
     {% if page_lst %}
         {% for pro in page_lst %}
-            <tr>
+            <tr _id="{{ pro.id }}">
                 <td style='cursor: pointer' ondblclick='changeDatas($(this), "factory")'>{{ pro.factory_name|default:'空' }}</td>
-                <td style='cursor: pointer' ondblclick='changeDatas($(this), "id")'>
-                    <a href="{% url 'turnoverZNQ:detail' pro.id 1 %}">{{ pro.product_type }}</a>
-                </td>
+                <td style='cursor: pointer' ondblclick='changeDatas($(this), "id")'><a href="{% url 'turnoverZNQ:detail' pro.id 1 %}">{{ pro.product_type }}</a></td>
                 <td style='cursor: pointer' ondblclick='changeDatas($(this), "name")'>{{ pro.product_name }}</td>
                 <td style='cursor: pointer' ondblclick='changeDatas($(this), "first")'>{{ pro.product_default }}</td>
                 <td>{{ pro.product_now }}</td>
