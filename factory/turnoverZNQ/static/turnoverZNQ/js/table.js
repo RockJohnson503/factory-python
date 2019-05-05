@@ -11,7 +11,7 @@ function cancleOperat(node) {
     let vals = td.attr("_val");
 
     let txtHtml = td.attr("_id") === "1" ? $("<span onclick='href($(this))'>" + vals + "</span>") : vals;
-    td.empty()
+    td.empty();
     td.append(txtHtml);
 
     td.parent().removeClass("changing");
@@ -115,6 +115,6 @@ function update(url) {
     }else if(res === 0){
         alert("更新失败!")
     }else {
-        alert("更新成功,请重启服务器!")
+        alert("更新成功,请重启服务器并刷新!")
     }
 }
