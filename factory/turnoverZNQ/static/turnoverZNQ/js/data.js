@@ -59,96 +59,18 @@ function checkOpDatas() {
 
     // //具体操作
     if(modalHeader.innerText.indexOf("入库") !== -1){
-        if(!bill_id || !amounts){
-            alert("请输入批次号和数量!");
-            return ;
-        }
-        res = {
-            "bill_id": bill_id,
-            "operate": "入库",
-            "num": amounts,
-            "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())
-        };
+        if(!bill_id || !amounts){alert("请输入批次号和数量!");return ;}
+        res = {"bill_id": bill_id, "operate": "入库", "num": amounts,
+            "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
         if(getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(res)) === 'err'){alert("入库失败!code(3)"); return ;}
-
-    //     product.in += amounts;
-    //     product.now = product.first + product.in - product.out;
-    //     results.push(product);
-    //     results.push();
-    //     results.push({"factory": thisFactory, "id": thisId, "name": thisName, "key": key, "num": amounts});
-    //
-    //     if(jsonPush(JSON.stringify(results[0]), "turnoverData") !== null &&
-    //         jsonPush(JSON.stringify(results[1]), "detailData") !== null &&
-    //         jsonPush(JSON.stringify(results[2]), "keyNum") !== null){
-    //     }else{
-    //         alert("入库失败!code(3)");
-    //         return ;
-    //     }
     }else{
-        if(!amounts){
-            alert("请输入数量!");
-            return ;
-        }
-
-        let detailData = getDatas("getJsonData?cur=detailData");
-        let allIn = jsonSearch({"factory": thisFactory, "id": thisId, "name": thisName, "operat": "入库"}, false, detailData).data;
-        let result= {
-                    "factory": thisFactory,
-                    "id": thisId,
-                    "name": thisName,
-                    "key": "",
-                    "operat": "领料",
-                    "num": amounts,
-                    "date": date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
-                };
-
-        //判断领料量是否超出库存
-        if(amounts > product.now){
-            alert("领料量已经超出库存!");
-            return ;
-        }
-
-        //修改产品的数量
-        product.out += amounts;
-        product.now = product.first + product.in - product.out;
-        if(allIn.length === 0){
-            if(jsonPush(JSON.stringify(result), "detailData") === null){alert("领料失败!code(6)");return;}
-        }
-
-        for(let i = allIn.length - 1; i >= 0; i--){
-            curKey = allIn[i].key;//当前的批次号
-            curKeys = jsonSearch({"key": curKey, "factory": thisFactory, "id": thisId, "name": thisName}, false, keys).data[0];
-
-            //检查该批次号是否有库存
-            if(curKeys.num === 0){
-                continue;
-            }
-
-            //检查该次批次号库存是否足够
-            if(curKeys.num < amounts){
-                result.num = curKeys.num;
-                result.key = curKey;
-                amounts -= curKeys.num;
-                curKeys.num = 0;
-
-                if(jsonPush(JSON.stringify(result), "detailData") === null){alert("领料失败!code(4)");return;}
-                if(jsonPush(JSON.stringify(curKeys), "keyNum") === null){alert("领料失败!code(5)");return;}
-                continue;
-            }
-
-            //最后一次加入
-            result.num = amounts;
-            result.key = curKey;
-            curKeys.num -= amounts;
-
-            if(jsonPush(JSON.stringify(result), "detailData") === null){alert("领料失败!code(6)");return;}
-            if(jsonPush(JSON.stringify(curKeys), "keyNum") === null){alert("领料失败!code(7)");return;}
-            break;
-        }
-
-        if(jsonPush(JSON.stringify(product), "turnoverData") === null){alert("领料失败!code(8)");return;}
+        if(!amounts){alert("请输入数量!");return ;}
+        res = {"operate": "领料", "num": amounts, "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
+        res = getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(res));
+        if(res === 'err'){alert("领料失败!code(4)"); return ;}
+        else if(res === 'big'){alert("库存不足!"); return ;}
     }
-    // location.reload();
+    location.reload();
 }
 
 //检查添加输入的数据
