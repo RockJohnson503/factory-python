@@ -19,7 +19,7 @@
                 <td>{{ detail.product.factory_name|default:'空' }}</td>
                 <td>{{ detail.product.product_type }}</td>
                 <td>{{ detail.product.product_name }}</td>
-                <td>{{ detail.bill_id }}</td>
+                <td>{{ detail.bill_id|default:'空' }}</td>
                 <td>{{ detail.operate }}</td>
                 <td>{{ detail.operate_num }}</td>
                 <td>{{ detail.time|date:'Y-n-j' }}</td>
