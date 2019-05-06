@@ -29,7 +29,7 @@ class Product(models.Model):
 
 
 class Detail(models.Model):
-    bill_id = models.CharField(max_length=50, verbose_name='批次号')
+    bill_id = models.CharField(max_length=50, null=True, verbose_name='批次号')
     operate = models.CharField(max_length=10, verbose_name='操作')
     operate_num = models.IntegerField(verbose_name='数量')
     time = models.DateField(verbose_name='日期')
