@@ -23,6 +23,14 @@ class Product(models.Model):
     def is_del(self):
         return False if self.is_delete == 0 else True
 
+    def has_same_product(self):
+        products = Product.objects.all()
+        for product in products:
+            if self.id != product.id and self.factory_name == product.factory_name and \
+                    self.product_type == product.product_type and self.product_name == product.product_name:
+                return True
+        return False
+
     is_del.admin_order_field = 'factory_name'
     is_del.boolean = True
     is_del.short_description = '是否删除?'
