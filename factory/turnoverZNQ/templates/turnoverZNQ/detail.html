@@ -27,7 +27,7 @@
             <td>{{ detail.bill_id|default:'空' }}</td>
             <td>{{ detail.operate }}</td>
             <td>{{ detail.operate_num }}</td>
-            <td>{{ detail.time|date:'Y-n-j' }}</td>
+            <td>{{ detail.time|date:'Y-m-d' }}</td>
         </tr>
     {% empty %}
         <tr><td colspan="7"><div class="reminder"><p>没有检索到数据</p></div></td></tr>
