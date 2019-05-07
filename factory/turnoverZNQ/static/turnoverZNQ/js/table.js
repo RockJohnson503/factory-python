@@ -39,19 +39,6 @@ function changeDatas(td, type){
     });
 }
 
-/*设置每页显示的条数S*/
-function changePages(pageNum){
-    tableNum=pageNum;
-    if(backupAataArray.length>tableNum){
-        filtrateTable=backupAataArray.slice(0,tableNum);
-    }else{
-        filtrateTable=backupAataArray.slice(0);
-    }
-    if(getDatas("changeTableNum?tableNum=" + tableNum) === null){alert("获取数据失败!code(11)"); return}
-    tableCreate();
-    createPages();
-}
-
 //取消输入
 function cancle(node) {
     let tbody = document.getElementById("userImportTable").getElementsByTagName("tbody")[0];
