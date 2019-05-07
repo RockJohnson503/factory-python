@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseNotFound, HttpResponse
 from django.core.paginator import Paginator
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Q
 from django.urls import reverse
@@ -42,10 +43,12 @@ def base_page(model, page):
     # 通用的分页方法
     next_page = None
     prev_page = None
-    paginator = Paginator(model, 10)
+    page_size = cache.get_or_set('page_size', 10, None)
 
-    if False:
-        return {'page_lst': model}
+    if page_size == 'all':
+        return {'page_lst': model, 'page_size': page_size}
+
+    paginator = Paginator(model, page_size)
     if page > paginator.num_pages + 1:
         return None
 
@@ -58,7 +61,7 @@ def base_page(model, page):
     if page_lst.has_previous():
         prev_page = page - 1
 
-    return {'page_lst': page_lst, 'cur_page': page, 'prev_page': prev_page, 'next_page': next_page, 'page_num': page_num}
+    return {'page_lst': page_lst, 'cur_page': page, 'prev_page': prev_page, 'next_page': next_page, 'page_num': page_num, 'page_size': page_size}
 
 def product(request, page=1, query=None):
     # 产品的视图
@@ -187,4 +190,16 @@ def detail_add(request, product_id):
         res = 'ok'
     except:
         res = 'err'
+    return HttpResponse(res)
+
+def page_change(request):
+    # 修改每页显示的数量
+    page_size = request.GET.get('page_size')
+    res = 'ok'
+    if page_size != 'all':
+        try:
+            page_size = int(page_size)
+        except:
+            res = 'err'
+    cache.set('page_size', page_size, None)
     return HttpResponse(res)
