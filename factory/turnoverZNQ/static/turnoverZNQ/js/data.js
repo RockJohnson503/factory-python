@@ -162,3 +162,9 @@ function changeProduct(td, type) {
     if(res === 'err'){alert("修改产品失败!code(10)");return ;}else if(res === 'duplicate'){alert("您要修改的产品已存在!"); return ;}
     location.reload();
 }
+
+// 修改每页显示的条数
+function changePages(pageNum){
+    if(getDatas("/page/change/?page_size=" + pageNum) === 'err'){alert("获取数据失败!code(11)"); return}
+    location.reload();
+}
