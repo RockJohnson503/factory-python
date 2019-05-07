@@ -16,6 +16,7 @@ urlpatterns=[
     path('detail/<int:product_id>/page/<int:page>/search/<str:query>/', views.detail, name='detail_sear'),
     path('product/add/', views.product_add, name='product_add'),
     path('product/delete/', views.product_del, name='product_del'),
+    path('product/change/', views.product_change, name='product_change'),
     path('detail/<int:product_id>/add/', views.detail_add, name='detail_add'),
     path('search/', views.search, name='search'),
 ]
