@@ -57,17 +57,27 @@
                                 </div>
 
                                 <!--显示页码数，前翻页，后翻页，当前页码-->
+                                {% url 'turnoverZNQ:product' prev_page as prev_url %}
+                                {% url 'turnoverZNQ:product' next_page as next_url %}
+                                {% if query %}
+                                    {% url 'turnoverZNQ:product_sear' prev_page query as prev_url %}
+                                    {% url 'turnoverZNQ:product_sear' next_page query as next_url %}
+                                {% endif %}
                                 <div class=" tablePageinate">
                                     {% if prev_page %}
-                                        <a href="{% block prev_href %}{% url 'turnoverZNQ:product' prev_page %}{% endblock %}" class="pageinateBtn previous">&lt;</a>
+                                        <a href="{% block prev_href %}{{ prev_url }}{% endblock %}" class="pageinateBtn previous">&lt;</a>
                                     {% else %}
                                         <a href="javascript:;" class="pageinateBtn previous disabled">&lt;</a>
                                     {% endif %}
 
                                     {% for page in page_num %}
                                         {% if page %}
+                                            {% url 'turnoverZNQ:product' page as cur_url %}
+                                            {% if query %}
+                                                {% url 'turnoverZNQ:product_sear' page query as cur_url %}
+                                            {% endif %}
                                             <span class="pageBtnS">
-                                                <a href="{% block page_href %}{% url 'turnoverZNQ:product' page %}{% endblock %}"
+                                                <a href="{% block page_href %}{{ cur_url }}{% endblock %}"
                                                    class="pageinateBtn{% if page == cur_page %} current{% endif %}">{{ page }}</a>
                                             </span>
                                         {% endif %}
@@ -75,7 +85,7 @@
                                     {% endfor %}
 
                                     {% if next_page %}
-                                        <a href="{% block next_href %}{% url 'turnoverZNQ:product' next_page %}{% endblock %}" class="pageinateBtn next">&gt;</a>
+                                        <a href="{% block next_href %}{{ next_url }}{% endblock %}" class="pageinateBtn next">&gt;</a>
                                     {% else %}
                                         <a href="javascript:;" class="pageinateBtn next disabled">&gt;</a>
                                     {% endif %}
