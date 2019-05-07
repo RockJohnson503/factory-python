@@ -131,6 +131,10 @@ def product_change(request):
                 p.update(product_default=data['first'])
                 p.update(product_now=p[0].product_default + p[0].product_in - p[0].product_out)
             User.objects.get(user_name='Rock').log_set.create(log_time=now(), product_id=product_id, operate='修改产品')
+            if p[0].has_same_product():
+                raise BaseException('duplicate')
+    except BaseException:
+        res = 'duplicate'
     except:
         res = 'err'
     return HttpResponse(res)
