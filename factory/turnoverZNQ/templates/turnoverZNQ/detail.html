@@ -13,23 +13,33 @@
 {% endblock %}
 
 {% block tbody %}
-    {% if page_lst %}
-        {% for detail in page_lst %}
-            <tr>
-                <td>{{ detail.product.factory_name|default:'空' }}</td>
-                <td>{{ detail.product.product_type }}</td>
-                <td>{{ detail.product.product_name }}</td>
-                <td>{{ detail.bill_id|default:'空' }}</td>
-                <td>{{ detail.operate }}</td>
-                <td>{{ detail.operate_num }}</td>
-                <td>{{ detail.time|date:'Y-n-j' }}</td>
-            </tr>
-        {% endfor %}
-    {% else %}
+    {% for detail in page_lst %}
+        <tr>
+            <td>{{ detail.product.factory_name|default:'空' }}</td>
+            <td>{{ detail.product.product_type }}</td>
+            <td>{{ detail.product.product_name }}</td>
+            <td>{{ detail.bill_id|default:'空' }}</td>
+            <td>{{ detail.operate }}</td>
+            <td>{{ detail.operate_num }}</td>
+            <td>{{ detail.time|date:'Y-n-j' }}</td>
+        </tr>
+    {% empty %}
         <tr><td colspan="7"><div class="reminder"><p>没有检索到数据</p></div></td></tr>
-    {% endif %}
+    {% endfor %}
 {% endblock %}
 
-{% block prev_href %}{% url 'turnoverZNQ:detail' product_id prev_page %}{% endblock %}
-{% block page_href %}{% url 'turnoverZNQ:detail' product_id page %}{% endblock %}
-{% block next_href %}{% url 'turnoverZNQ:detail' product_id next_page %}{% endblock %}
+{% url 'turnoverZNQ:detail' product_id prev_page as prev_url %}
+{% url 'turnoverZNQ:detail' product_id next_page as next_url %}
+{% if query %}
+    {% url 'turnoverZNQ:detail_sear' product_id prev_page query as prev_url %}
+    {% url 'turnoverZNQ:detail_sear' product_id next_page query as next_url %}
+{% endif %}
+{% block prev_href %}{{ prev_url }}{% endblock %}
+{% block page_href %}
+    {% if query %}
+        {% url 'turnoverZNQ:detail_sear' product_id page query %}
+    {% else %}
+        {% url 'turnoverZNQ:detail' product_id page %}
+    {% endif %}
+{% endblock %}
+{% block next_href %}{{ next_url }}{% endblock %}
