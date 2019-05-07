@@ -12,6 +12,12 @@
     </tr>
 {% endblock %}
 
+{% block search_hide %}
+    <input type="hidden" name="urlname" value="detail">
+    <input type="hidden" name="product_id" value="{{ product_id }}">
+{% endblock %}
+{% block search_place %}年-月-日{% endblock %}
+
 {% block tbody %}
     {% for detail in page_lst %}
         <tr>
