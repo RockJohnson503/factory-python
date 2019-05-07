@@ -151,27 +151,13 @@ function deleteDatas(node) {
 }
 
 //修改产品信息
-function changeProduct(td, type, rData) {
+function changeProduct(td, type) {
     let vals = td.find("input").val();
+    let product_id = Number(td.parent().attr("_id"));
     let datas = {};
-    let results = [{"factory": td.parent().children().eq(0).text(), "id": td.parent().children().eq(1).text(),
-        "name": td.parent().children().eq(2).text()}];
-    let first = Number(type === "first" ? vals : td.parent().children().eq(3).text());
-    let oin = Number(td.parent().children().eq(5).text());
-    let out = Number(td.parent().children().eq(6).text());
-
     datas[type] = vals;
-    results.push(datas);
-    for(let i = 0; i < 3; i++){
-        if(td.parent().children().eq(i).attr("_val")){
-            results[0][type] = rData;
-        }
-    }
 
-    if(getDatas("changeProduct?origin=" + JSON.stringify(results[0]) + "&datas=" + JSON.stringify(results[1])) === null){
-        alert("修改产品失败!code(10)");
-        return ;
-    }
-    td.text(vals);
-    td.parent().children().eq(4).text(first + oin - out);
+    if(product_id != 0 && !product_id){alert("页面被修改!"); return;}
+    if(getDatas("/product/change/?id=" + JSON.stringify(product_id) + "&datas=" + JSON.stringify(datas)) === 'err'){alert("修改产品失败!code(10)");return ;}
+    location.reload();
 }
