@@ -33,7 +33,7 @@ function changeDatas(td, type){
     //修改产品的开关
     $("#changeInp").bind("keypress", function (ev) {
         if(ev.which === 13){
-            changeProduct(td, type, vals);
+            changeProduct(td, type);
             td.parent().removeClass("changing");
         }
     });
