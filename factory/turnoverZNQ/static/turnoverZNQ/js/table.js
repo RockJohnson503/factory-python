@@ -11,6 +11,7 @@ function cancleOperat(node) {
     let vals = td.attr("_val");
 
     let txtHtml = td.attr("_id") === "1" ? $("<span onclick='href($(this))'>" + vals + "</span>") : vals;
+    td.removeAttr("_val");
     td.empty();
     td.append(txtHtml);
 
