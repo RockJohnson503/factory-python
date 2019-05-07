@@ -35,17 +35,13 @@ function idOperat(id, type, operat){
 //检查批次号输入的数据
 function checkOpDatas() {
     let modalHeader = $(".modal-header strong")[0];
-    // let thisFactory = modalHeader.getAttribute("_factory");
     let this_id = Number(modalHeader.getAttribute("_id"));
-    // let thisName = modalHeader.getAttribute("_name");
     let bill_id = $("input[name = 'keys']").val();
     let amounts = Number($("input[name = 'amounts']").val());
     let dates = $("input[name = 'dates']").val();
     let date = new Date();
     let results = "";
-    // let product = jsonSearch({"factory": thisFactory, "id": thisId, "name": thisName}).data[0];
-    // let keys = getDatas("getJsonData?cur=keyNum");
-    //
+
     if(dates && !/(\d{1,2})\-(\d{1,2})/.test(dates)){
         alert("请输入正确的时间!");
         return ;
@@ -60,13 +56,13 @@ function checkOpDatas() {
     // //具体操作
     if(modalHeader.innerText.indexOf("入库") !== -1){
         if(!bill_id || !amounts){alert("请输入批次号和数量!");return ;}
-        res = {"bill_id": bill_id, "operate": "入库", "num": amounts,
+        results = {"bill_id": bill_id, "operate": "入库", "num": amounts,
             "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
-        if(getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(res)) === 'err'){alert("入库失败!code(3)"); return ;}
+        if(getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(results)) === 'err'){alert("入库失败!code(3)"); return ;}
     }else{
         if(!amounts){alert("请输入数量!");return ;}
-        res = {"operate": "领料", "num": amounts, "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
-        res = getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(res));
+        results = {"operate": "领料", "num": amounts, "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
+        let res = getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(results));
         if(res === 'err'){alert("领料失败!code(4)"); return ;}
         else if(res === 'big'){alert("库存不足!"); return ;}
     }
