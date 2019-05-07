@@ -158,6 +158,7 @@ function changeProduct(td, type) {
     datas[type] = vals;
 
     if(product_id != 0 && !product_id){alert("页面被修改!"); return;}
-    if(getDatas("/product/change/?id=" + JSON.stringify(product_id) + "&datas=" + JSON.stringify(datas)) === 'err'){alert("修改产品失败!code(10)");return ;}
+    let res = getDatas("/product/change/?id=" + JSON.stringify(product_id) + "&datas=" + JSON.stringify(datas));
+    if(res === 'err'){alert("修改产品失败!code(10)");return ;}else if(res === 'duplicate'){alert("您要修改的产品已存在!"); return ;}
     location.reload();
 }
