@@ -12,6 +12,13 @@ from login.models import User
 def index(request):
     return redirect(reverse('turnoverZNQ:product', args=(1,)))
 
+def search(request):
+    urlname = request.POST.get('urlname')
+    query = request.POST.get('query')
+    product_id = request.POST.get('product_id')
+    url = reverse('turnoverZNQ:product_sear', args=(1,query)) if urlname == 'product' else reverse('turnoverZNQ:detail_sear', args=(product_id, 1,query))
+    return redirect(url)
+
 def page_treat(cur_page, page_num):
     # 处理分页按钮
     res = page_num
