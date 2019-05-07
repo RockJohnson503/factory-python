@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseNotFound, HttpResponse
 from django.core.paginator import Paginator
 from django.db import transaction
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.timezone import now
 import json
@@ -52,19 +53,26 @@ def base_page(model, page):
 
     return {'page_lst': page_lst, 'cur_page': page, 'prev_page': prev_page, 'next_page': next_page, 'page_num': page_num}
 
-def product(request, page=1):
+def product(request, page=1, query=None):
     # 产品的视图
-    products = User.objects.get(user_name='Rock').product_set.filter(is_delete=0).order_by('product_name')
+    products = User.objects.get(user_name='Rock').product_set.filter(is_delete=0).order_by('product_name') if not query else \
+        User.objects.get(user_name='Rock').product_set.filter(Q(is_delete=0), Q(factory_name__contains=query) |
+                                                              Q(product_type__contains=query) |
+                                                              Q(product_name__contains=query)).order_by('product_name')
     res = base_page(products, page)
+    if query:
+        res['query'] = query
     return render(request, 'turnoverZNQ/index.html', res) if res else HttpResponseNotFound()
 
-def detail(request, product_id, page=1):
+def detail(request, product_id, page=1, query=None):
     # 某产品的流水明细
     products = get_object_or_404(User.objects.get(user_name='Rock').product_set, pk=product_id)
-    details = products.detail_set.order_by('-time')
+    details = products.detail_set.order_by('-time') if not query else products.detail_set.filter(time__contains=query).order_by('-time')
     res = base_page(details, page)
     if res:
         res['product_id'] = product_id
+    if query:
+        res['query'] = query
     return render(request, 'turnoverZNQ/detail.html', res) if res else HttpResponseNotFound()
 
 def product_add(request):
