@@ -113,6 +113,28 @@ def product_del(request):
         res = 'err'
     return HttpResponse(res)
 
+def product_change(request):
+    # 修改产品
+    product_id = request.GET.get('id')
+    data = json.loads(request.GET.get('datas'))
+    res = 'ok'
+    try:
+        with transaction.atomic():
+            p = User.objects.get(user_name='Rock').product_set.filter(id=product_id)
+            if data.get('factory'):
+                p.update(factory_name=data['factory'])
+            elif data.get('id'):
+                p.update(product_type=data['id'])
+            elif data.get('name'):
+                p.update(product_name=data['name'])
+            elif data.get('first'):
+                p.update(product_default=data['first'])
+                p.update(product_now=p[0].product_default + p[0].product_in - p[0].product_out)
+            User.objects.get(user_name='Rock').log_set.create(log_time=now(), product_id=product_id, operate='修改产品')
+    except:
+        res = 'err'
+    return HttpResponse(res)
+
 def detail_add(request, product_id):
     # 添加流水账明细
     args = json.loads(request.GET.get('args'))
