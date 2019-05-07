@@ -49,10 +49,10 @@
                                 <div class="digitalLength" >
                                     <label>每页显示
                                         <select name="tablesLength" class="tablesLength" onchange="changePages(this.value)">
-                                            <option value="10">10</option>
-                                            <option value="15">15</option>
-                                            <option value="20">20</option>
-                                            <option value="全部">全部</option>
+                                            <option {% if page_size == 10 %}selected="selected"{% endif %} value="10">10</option>
+                                            <option {% if page_size == 15 %}selected="selected"{% endif %} value="15">15</option>
+                                            <option {% if page_size == 20 %}selected="selected"{% endif %} value="20">20</option>
+                                            <option {% if page_size == 'all' %}selected="selected"{% endif %} value="all">全部</option>
                                         </select>
                                     </label>
                                 </div>
