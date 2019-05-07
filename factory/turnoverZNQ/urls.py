@@ -19,4 +19,5 @@ urlpatterns=[
     path('product/change/', views.product_change, name='product_change'),
     path('detail/<int:product_id>/add/', views.detail_add, name='detail_add'),
     path('search/', views.search, name='search'),
+    path('page/change/', views.page_change, name='page_change'),
 ]
