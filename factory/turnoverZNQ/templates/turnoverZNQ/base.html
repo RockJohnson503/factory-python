@@ -6,38 +6,38 @@
     <link rel="stylesheet" href="{% static 'turnoverZNQ/css/search-form.css' %}">
 {% endblock %}
 {% block content %}
+    <div class="header">
+        <div class="wrap">
+            <div class="dataTablesInfo"  role="status" aria-live="polite">
+                {% block botton %}<a href="{% url 'turnoverZNQ:index' %}"><button class="showDatasBtn">返回主页</button></a>{% endblock %}
+            </div>
+
+            <!--更新按钮-->
+            <div class="tablesUpdate"  role="status" aria-live="polite">
+                <button class="showDatasBtn" onclick="update('{% url 'update:update' %}')">更新软件</button>
+            </div>
+
+            <!--动态搜索框-->
+            <section class="container">
+                <form style="position: relative" method="post" action="{% url 'turnoverZNQ:search' %}" onsubmit="submitFn(this, event);">
+                    {% csrf_token %}
+                    <div class="search-wrapper">
+                        {% block search_hide %}<input type="hidden" name="urlname" value="product">{% endblock %}
+                        <div class="input-holder">
+                            <input type="text" name="query" class="search-input" placeholder="格式: {% block search_place %}厂家&型号&名称{% endblock %}" />
+                            <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+                        </div>
+                        <span class="close" onclick="searchToggle(this, event);"></span>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
     <div>
         <div class="digital">
             <!-- 中间表格部分  S-->
             <table width="100%" id="userImportTable" border="0" cellpadding="0" cellspacing="0">
                 <thead>
-                    <tr>
-                        <td colspan="8">
-                            <div class="dataTablesInfo"  role="status" aria-live="polite">
-                                {% block botton %}<a href="{% url 'turnoverZNQ:index' %}"><button class="showDatasBtn">返回主页</button></a>{% endblock %}
-                            </div>
-
-                            <!--更新按钮-->
-                            <div class="tablesUpdate"  role="status" aria-live="polite">
-                                <button class="showDatasBtn" onclick="update('{% url 'update:update' %}')">更新软件</button>
-                            </div>
-
-                            <!--动态搜索框-->
-                            <section class="container">
-                                <form style="position: relative" method="post" action="{% url 'turnoverZNQ:search' %}" onsubmit="submitFn(this, event);">
-                                    {% csrf_token %}
-                                    <div class="search-wrapper">
-                                        {% block search_hide %}<input type="hidden" name="urlname" value="product">{% endblock %}
-                                        <div class="input-holder">
-                                            <input type="text" name="query" class="search-input" placeholder="格式: {% block search_place %}厂家&型号&名称{% endblock %}" />
-                                            <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
-                                        </div>
-                                        <span class="close" onclick="searchToggle(this, event);"></span>
-                                    </div>
-                                </form>
-                            </section>
-                        </td>
-                    </tr>
                     {% block thead %}{% endblock %}
                 </thead>
                 <tbody>{% block tbody %}{% endblock %}</tbody>
