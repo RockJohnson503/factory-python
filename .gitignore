@@ -3,4 +3,3 @@ __pycache__
 factory/turnoverZNQ/migrations/*
 factory/login/migrations/*
 factory/update/migrations/*
-mytool.py
