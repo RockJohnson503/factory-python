@@ -1,10 +1,10 @@
-# encoding: utf-8
+﻿# encoding: utf-8
 
 """
 File: test.py
 Author: Rock Johnson
 """
-import os, requests, MySQLdb, json
+import os, MySQLdb, json
 
 # 输入git命令
 # file = os.path.dirname(os.path.abspath(""))
@@ -21,7 +21,7 @@ import os, requests, MySQLdb, json
 
 # 导入数据库
 def dump_json(arg):
-    db = MySQLdb.connect(host='localhost', user='root', passwd='k836867547', db='factory')
+    db = MySQLdb.connect(host='localhost', user='root', passwd='k836867547', db='factory', charset='utf8')
     cur = db.cursor()
     url = input("输入文件路径: ")
     query = ["insert into turnoverZNQ_product (factory_name, product_type, product_name, product_default, "
@@ -31,8 +31,11 @@ def dump_json(arg):
              "(%s, %s, %s, %s, %s);",
              "insert into turnoverZNQ_productlave (amount, detail_id) values (%s, %s)"]
 
-    with open(url) as file:
-        date = json.loads(file.read())
+    with open(url, encoding='utf8') as file:
+        date = file.read()
+        if date .startswith(u'\ufeff'):
+                date = date.encode('utf8')[3:].decode('utf8')
+        date = json.loads(date)
 
     for i in date['data']:
         if arg == 1:
