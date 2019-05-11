@@ -3,3 +3,4 @@ __pycache__
 factory/turnoverZNQ/migrations/*
 factory/login/migrations/*
 factory/update/migrations/*
+factory/static/turnoverZNQ
