@@ -94,15 +94,3 @@ function operatToggle() {
     //加载弹窗
     loadModal();
 }
-
-//更新
-function update(url) {
-    res = getDatas(url);
-    if(res === -1){
-        alert("您还没有安装git!")
-    }else if(res === 0){
-        alert("更新失败!")
-    }else {
-        alert("更新成功,请重启服务器并刷新!")
-    }
-}
