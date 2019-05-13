@@ -42,9 +42,13 @@ function checkOpDatas() {
     let date = new Date();
     let results = "";
 
-    if(dates && !/(\d{1,2})\-(\d{1,2})/.test(dates)){
-        alert("请输入正确的时间!");
-        return ;
+    if(dates && !/(^\d{1,2})\-(\d{1,2}$)/.test(dates)){
+        if(!/(^\d{4}-\d{1,2})\-(\d{1,2}$)/.test(dates)){
+            alert("请输入正确的时间!");
+            return ;
+        }
+    }else{
+        dates = date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())
     }
 
     let txt = (bill_id ? ("批次号: " + bill_id + ", ") : "") + "数量: " + amounts + ", 时间: " + dates;
@@ -57,11 +61,11 @@ function checkOpDatas() {
     if(modalHeader.innerText.indexOf("入库") !== -1){
         if(!bill_id || !amounts){alert("请输入批次号和数量!");return ;}
         results = {"bill_id": bill_id, "operate": "入库", "num": amounts,
-            "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
+            "time": dates};
         if(getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(results)) === 'err'){alert("入库失败!code(3)"); return ;}
     }else{
         if(!amounts){alert("请输入数量!");return ;}
-        results = {"operate": "领料", "num": amounts, "time": date.getFullYear() + "-" + (dates || (date.getMonth()+1) + "-" + date.getDate())};
+        results = {"operate": "领料", "num": amounts, "time": dates};
         let res = getDatas('/detail/{1}/add/?args='.replace("{1}", this_id) + JSON.stringify(results));
         if(res === 'err'){alert("领料失败!code(4)"); return ;}
         else if(res === 'big'){alert("库存不足!"); return ;}
@@ -167,4 +171,18 @@ function changeProduct(td, type) {
 function changePages(pageNum){
     if(getDatas("/page/change/?page_size=" + pageNum) === 'err'){alert("获取数据失败!code(11)"); return}
     location.reload();
+}
+
+//更新
+function update(url) {
+    res = getDatas(url);
+    if(res === -1){
+        alert("您还没有安装git!")
+    }else if(res === -2) {
+        alert("更新静态数据失败!")
+    }else if(res === 0){
+        alert("更新失败!")
+    }else {
+        alert("更新成功,请重启服务器并刷新!")
+    }
 }
