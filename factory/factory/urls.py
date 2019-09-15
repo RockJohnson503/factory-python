@@ -20,4 +20,5 @@ urlpatterns = [
     path('', include('turnoverZNQ.urls')),
     path('update/', include('update.urls')),
     path('admin/', admin.site.urls),
+    path('websocket/', include('websocket.urls')),
 ]

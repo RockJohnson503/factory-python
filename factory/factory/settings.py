@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'login.apps.LoginConfig',
     'turnoverZNQ.apps.TurnoverConfig',
+    'websocket.apps.WebsocketConfig',
     'update.apps.UpdateConfig',
     'django.contrib.admin',
     'django.contrib.auth',
