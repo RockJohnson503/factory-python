@@ -11,7 +11,7 @@ import sys, getopt, eventlet
 from factory.wsgi import application
 
 
-addr, port = '192.168.31.42', 8000
+addr, port = '0.0.0.0', 8000
 opts, _ = getopt.getopt(sys.argv[1:], 'b:')
 for opt, value in opts:
     if opt == '-b':
